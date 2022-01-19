@@ -14,7 +14,11 @@ defmodule ElixirJobs.CLI do
     {opts, List.to_string(word)}
   end
 
-  defp response({opts, word}) do
-    if opts[:upcase], do: String.upcase(word), else: word
+  defp response(_args) do
+    {:ok, professions} = ElixirJobs.Parser.parse_professions()
+    {:ok, jobs} = ElixirJobs.Parser.parse_jobs()
+
+    ElixirJobs.JobsTable.create(jobs, professions)
+    |> ElixirJobs.JobsTable.prettify
   end
 end
