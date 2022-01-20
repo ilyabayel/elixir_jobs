@@ -31,17 +31,27 @@ defmodule ElixirJobs.Continents do
   @oceania_geo @continents |> Map.get(@oceania, %{}) |> Geo.JSON.decode!()
   @south_america_geo @continents |> Map.get(@south_america, %{}) |> Geo.JSON.decode!()
 
-  @spec get_continent_by_point(Geo.Point.t()):: String.t()
-  def get_continent_by_point(point) do
+  @spec get_name_by_location({float(), float()}):: String.t()
+  def get_name_by_location({latitude, longitude}) do
+    approximated_location = %Geo.Polygon{
+      coordinates: [
+        [
+          {longitude - 0.05, latitude + 0.05},
+          {longitude + 0.05, latitude + 0.05},
+          {longitude + 0.05, latitude - 0.05},
+          {longitude - 0.05, latitude - 0.05}
+        ]
+      ]
+    }
     cond do
-      Topo.contains?(@africa_geo, point) -> @africa
-      Topo.contains?(@antarctica_geo, point) -> @antarctica
-      Topo.contains?(@asia_geo, point) -> @asia
-      Topo.contains?(@australia_geo, point) -> @australia
-      Topo.contains?(@europe_geo, point) -> @europe
-      Topo.contains?(@north_america_geo, point) -> @north_america
-      Topo.contains?(@oceania_geo, point) -> @oceania
-      Topo.contains?(@south_america_geo, point) -> @south_america
+      Topo.intersects?(@africa_geo, approximated_location) -> @africa
+      Topo.intersects?(@antarctica_geo, approximated_location) -> @antarctica
+      Topo.intersects?(@asia_geo, approximated_location) -> @asia
+      Topo.intersects?(@australia_geo, approximated_location) -> @australia
+      Topo.intersects?(@europe_geo, approximated_location) -> @europe
+      Topo.intersects?(@north_america_geo, approximated_location) -> @north_america
+      Topo.intersects?(@oceania_geo, approximated_location) -> @oceania
+      Topo.intersects?(@south_america_geo, approximated_location) -> @south_america
       true -> "Unknown"
     end
   end

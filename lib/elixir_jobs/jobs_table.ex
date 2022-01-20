@@ -7,6 +7,9 @@ defmodule ElixirJobs.JobsTable do
         }
 
   @spec create(list(ElixirJobs.Job.t()), ElixirJobs.Parser.professions_dict()) :: t()
+  @spec prettify(t()) :: String.t()
+  @spec to_csv(t()) :: String.t()
+
   def create(jobs, professions) do
     profession_categories =
       Map.values(professions)
@@ -33,9 +36,12 @@ defmodule ElixirJobs.JobsTable do
     }
   end
 
-  @spec prettify(t()) :: String.t()
   def prettify(table) do
     TableRex.quick_render!(table.body, table.header, "Available jobs overview")
+  end
+
+  def to_csv(_table) do
+    ""
   end
 
   defp create_table_body(jobs_dict, profession_categories) do
@@ -46,9 +52,14 @@ defmodule ElixirJobs.JobsTable do
         create_row(jobs_dict, continent, profession_categories)
       end)
 
-    total_row = create_total_row(rows_by_continents)
+    case length(rows_by_continents) do
+      0 ->
+        rows_by_continents
 
-    [total_row] ++ rows_by_continents
+      _ ->
+        total_row = create_total_row(rows_by_continents)
+        [total_row] ++ rows_by_continents
+    end
   end
 
   defp create_total_row(rows_by_continents) do
@@ -86,9 +97,7 @@ defmodule ElixirJobs.JobsTable do
          profession_categories
        ) do
     continent =
-      ElixirJobs.Continents.get_continent_by_point(%Geo.Point{
-        coordinates: {job.office_longitude, job.office_latitude}
-      })
+      ElixirJobs.Continents.get_name_by_location({job.office_latitude, job.office_longitude})
 
     profession =
       Map.get(
