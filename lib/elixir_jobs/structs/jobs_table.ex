@@ -17,8 +17,6 @@ defmodule ElixirJobs.JobsTable do
       |> Enum.sort()
       |> Enum.concat(["Unknown"])
 
-    profession_categories = profession_categories
-
     jobs_dict =
       jobs
       |> Enum.reduce(
@@ -72,11 +70,13 @@ defmodule ElixirJobs.JobsTable do
   end
 
   defp create_row(jobs_dict, continent, profession_categories) do
-    [continent] ++
-      [get_total(jobs_dict, continent, profession_categories)] ++
+    [continent]
+    |> Enum.concat([get_total(jobs_dict, continent, profession_categories)])
+    |> Enum.concat(
       Enum.map(profession_categories, fn prof_category_name ->
         jobs_dict[continent][prof_category_name]
       end)
+    )
   end
 
   defp get_total(jobs_dict, continent, profession_categories) do
@@ -92,7 +92,9 @@ defmodule ElixirJobs.JobsTable do
          profession_categories
        ) do
     continent =
-      ElixirJobs.Utils.Continents.get_name_by_location({job.office_latitude, job.office_longitude})
+      ElixirJobs.Utils.Continents.get_name_by_location(
+        {job.office_latitude, job.office_longitude}
+      )
 
     profession =
       Map.get(

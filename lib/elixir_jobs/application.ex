@@ -8,7 +8,7 @@ defmodule ElixirJobs.Application do
 
   @impl true
   def start(_type, _args) do
-    {:ok, jobs} = ElixirJobs.Utils.Parser.parse_jobs(jobs_path())
+    jobs = ElixirJobs.Utils.Parser.parse_jobs(jobs_path())
 
     children = [
       {Plug.Cowboy, scheme: :http, plug: ElixirJobs.Router, options: [port: cowboy_port()]},
