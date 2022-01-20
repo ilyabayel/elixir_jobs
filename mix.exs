@@ -30,7 +30,11 @@ defmodule ElixirJobs.MixProject do
       {:nimble_csv, "~> 1.1"},
       {:jason, "~> 1.2"},
       {:table_rex, "~> 3.1.1"},
-      {:topo, "~> 0.4.0"}
+      {:topo, "~> 0.4.0"},
+      {:plug_cowboy, "~> 2.5.2"},
+      {:geocalc, "~> 0.8"},
+      {:castore, "~> 0.1.0"},
+      {:mint, "~> 1.0"}
     ]
   end
 end

@@ -1,4 +1,5 @@
 defmodule ElixirJobs.Job do
+  @derive Jason.Encoder
   defstruct profession_id: "",
             contract_type: "",
             name: "",
