@@ -21,6 +21,7 @@ defmodule ElixirJobs.Utils.Continents do
   @north_america "North America"
   @oceania "Oceania"
   @south_america "South America"
+  @unknown "Unknown"
 
   @africa_geo @continents |> Map.get(@africa, %{}) |> Geo.JSON.decode!()
   @antarctica_geo @continents |> Map.get(@antarctica, %{}) |> Geo.JSON.decode!()
@@ -31,7 +32,7 @@ defmodule ElixirJobs.Utils.Continents do
   @oceania_geo @continents |> Map.get(@oceania, %{}) |> Geo.JSON.decode!()
   @south_america_geo @continents |> Map.get(@south_america, %{}) |> Geo.JSON.decode!()
 
-  @spec get_name_by_location({float(), float()}):: String.t()
+  @spec get_name_by_location({float(), float()}) :: String.t()
   def get_name_by_location({latitude, longitude}) do
     approximated_location = %Geo.Polygon{
       coordinates: [
@@ -43,6 +44,7 @@ defmodule ElixirJobs.Utils.Continents do
         ]
       ]
     }
+
     cond do
       Topo.intersects?(@africa_geo, approximated_location) -> @africa
       Topo.intersects?(@antarctica_geo, approximated_location) -> @antarctica
@@ -54,5 +56,9 @@ defmodule ElixirJobs.Utils.Continents do
       Topo.intersects?(@south_america_geo, approximated_location) -> @south_america
       true -> "Unknown"
     end
+  end
+
+  def continents do
+    [@africa, @antarctica, @asia, @australia, @europe, @north_america, @oceania, @south_america, @unknown]
   end
 end

@@ -1,7 +1,7 @@
 defmodule ElixirJobs.Utils.Parser do
   alias NimbleCSV.RFC4180, as: CSV
 
-  @type professions_dict :: %{binary() => ElixirJobs.Profession.t()}
+  @type professions_dict :: %{binary() => binary()}
   @type jobs :: list(ElixirJobs.Job.t())
 
   @spec parse_jobs(binary()) :: jobs()
@@ -24,14 +24,10 @@ defmodule ElixirJobs.Utils.Parser do
   def parse_professions(path) do
     File.read!(path)
     |> CSV.parse_string()
-    |> Map.new(fn [id, name, category_name] ->
-      {id,
-       %ElixirJobs.Profession{
-         id: id,
-         name: name,
-         category_name: category_name
-       }}
+    |> Map.new(fn [id, _name, category_name] ->
+      {id, category_name}
     end)
+    |> Map.put_new("", "Unknown")
   end
 
   defp parse_float(string) do

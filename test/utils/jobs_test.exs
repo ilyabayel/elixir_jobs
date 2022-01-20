@@ -4,7 +4,7 @@ defmodule Utils.JobsTest do
 
   test "should avoid zero or negative radius" do
     expected_jobs_names = ["[Louis Vuitton North America] Team Manager, RTW - NYC"]
-    {:ok, jobs} = ElixirJobs.Utils.Parser.parse_jobs("data/technical-test-jobs-test.csv")
+    jobs = ElixirJobs.Utils.Parser.parse_jobs("data/technical-test-jobs-test.csv")
 
     jobs_in_area =
       ElixirJobs.Utils.Jobs.find_by_location(jobs, {40.7630463, -73.973527, 0})
@@ -15,7 +15,7 @@ defmodule Utils.JobsTest do
 
   test "should avoid negative radius value" do
     expected_jobs_names = ["[Louis Vuitton North America] Team Manager, RTW - NYC"]
-    {:ok, jobs} = ElixirJobs.Utils.Parser.parse_jobs("data/technical-test-jobs-test.csv")
+    jobs = ElixirJobs.Utils.Parser.parse_jobs("data/technical-test-jobs-test.csv")
 
     jobs_in_area =
       ElixirJobs.Utils.Jobs.find_by_location(jobs, {40.7630463, -73.973527, -10})
@@ -26,7 +26,7 @@ defmodule Utils.JobsTest do
 
   test "should avoid bad arithmetic expressions #1" do
     expected_jobs_names = ["[Louis Vuitton North America] Team Manager, RTW - NYC"]
-    {:ok, jobs} = ElixirJobs.Utils.Parser.parse_jobs("data/technical-test-jobs-test.csv")
+    jobs = ElixirJobs.Utils.Parser.parse_jobs("data/technical-test-jobs-test.csv")
 
     jobs_in_area =
       ElixirJobs.Utils.Jobs.find_by_location(jobs, {360 + 40.7630463, 360 - 73.973527, 0})
