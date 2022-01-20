@@ -1,4 +1,4 @@
-defmodule ElixirJobs.Continents do
+defmodule ElixirJobs.Utils.Continents do
   @continents File.read!("data/continents.geo.json")
               |> Jason.decode!()
               |> Map.get("features", [])

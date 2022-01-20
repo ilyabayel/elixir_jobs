@@ -15,8 +15,8 @@ defmodule ElixirJobs.CLI do
   end
 
   defp response(_args) do
-    {:ok, professions} = ElixirJobs.Parser.parse_professions("data/technical-test-professions.csv")
-    {:ok, jobs} = ElixirJobs.Parser.parse_jobs("data/technical-test-jobs-test.csv")
+    {:ok, professions} = ElixirJobs.Utils.Parser.parse_professions("data/technical-test-professions.csv")
+    {:ok, jobs} = ElixirJobs.Utils.Parser.parse_jobs("data/technical-test-jobs-test.csv")
 
     ElixirJobs.JobsTable.create(jobs, professions)
   end

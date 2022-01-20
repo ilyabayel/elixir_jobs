@@ -6,7 +6,7 @@ defmodule ElixirJobs.JobsTable do
           body: list(list(any))
         }
 
-  @spec create(list(ElixirJobs.Job.t()), ElixirJobs.Parser.professions_dict()) :: t()
+  @spec create(list(ElixirJobs.Job.t()), ElixirJobs.Utils.Parser.professions_dict()) :: t()
   @spec prettify(t()) :: String.t()
   @spec to_csv(t()) :: String.t()
 
@@ -97,7 +97,7 @@ defmodule ElixirJobs.JobsTable do
          profession_categories
        ) do
     continent =
-      ElixirJobs.Continents.get_name_by_location({job.office_latitude, job.office_longitude})
+      ElixirJobs.Utils.Continents.get_name_by_location({job.office_latitude, job.office_longitude})
 
     profession =
       Map.get(

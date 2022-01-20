@@ -1,4 +1,4 @@
-defmodule ElixirJobs.Parser do
+defmodule ElixirJobs.Utils.Parser do
   alias NimbleCSV.RFC4180, as: CSV
 
   @type professions_dict :: %{String.t() => ElixirJobs.Profession.t()}
