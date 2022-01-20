@@ -32,8 +32,8 @@ defmodule ElixirJobs.Utils.Continents do
   @oceania_geo @continents |> Map.get(@oceania, %{}) |> Geo.JSON.decode!()
   @south_america_geo @continents |> Map.get(@south_america, %{}) |> Geo.JSON.decode!()
 
-  @spec get_name_by_location({float(), float()}) :: String.t()
-  def get_name_by_location({latitude, longitude}) do
+  @spec get_by_location({float(), float()}) :: String.t()
+  def get_by_location({latitude, longitude}) do
     approximated_location = %Geo.Polygon{
       coordinates: [
         [
