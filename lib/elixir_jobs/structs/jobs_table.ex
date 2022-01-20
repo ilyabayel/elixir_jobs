@@ -8,7 +8,6 @@ defmodule ElixirJobs.JobsTable do
 
   @spec create(list(ElixirJobs.Job.t()), ElixirJobs.Utils.Parser.professions_dict()) :: t()
   @spec prettify(t()) :: String.t()
-  @spec to_csv(t()) :: String.t()
 
   def create(jobs, professions) do
     profession_categories =
@@ -38,10 +37,6 @@ defmodule ElixirJobs.JobsTable do
 
   def prettify(table) do
     TableRex.quick_render!(table.body, table.header, "Available jobs overview")
-  end
-
-  def to_csv(_table) do
-    ""
   end
 
   defp create_table_body(jobs_dict, profession_categories) do
