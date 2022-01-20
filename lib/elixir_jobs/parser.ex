@@ -1,15 +1,14 @@
 defmodule ElixirJobs.Parser do
   alias NimbleCSV.RFC4180, as: CSV
 
-  @path_to_jobs "data/technical-test-jobs-test.csv"
-  @path_to_professions "data/technical-test-professions.csv"
-
   @type professions_dict :: %{String.t() => ElixirJobs.Profession.t()}
   @type jobs :: list(ElixirJobs.Job.t())
 
-  @spec parse_jobs() :: {:error, atom} | {:ok, jobs()}
-  def parse_jobs() do
-    with {:ok, data} <- File.read(@path_to_jobs) do
+  @spec parse_jobs(String.t()) :: {:error, atom} | {:ok, jobs()}
+  @spec parse_professions(String.t()) :: {:error, atom} | {:ok, professions_dict()}
+
+  def parse_jobs(path) do
+    with {:ok, data} <- File.read(path) do
       jobs =
         CSV.parse_string(data)
         |> Enum.map(fn csv_record ->
@@ -27,9 +26,8 @@ defmodule ElixirJobs.Parser do
     end
   end
 
-  @spec parse_professions :: {:error, atom} | {:ok, professions_dict()}
-  def parse_professions() do
-    with {:ok, data} <- File.read(@path_to_professions) do
+  def parse_professions(path_to_professions) do
+    with {:ok, data} <- File.read(path_to_professions) do
       professions_dict =
         CSV.parse_string(data)
         |> Map.new(fn profession_csv_record ->

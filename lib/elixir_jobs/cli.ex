@@ -1,9 +1,9 @@
 defmodule ElixirJobs.CLI do
   def main(args \\ []) do
     args
-    |> parse_args()
-    |> response()
-    |> IO.puts()
+    |> parse_args
+    |> response
+    |> IO.inspect
   end
 
   defp parse_args(args) do
@@ -15,10 +15,9 @@ defmodule ElixirJobs.CLI do
   end
 
   defp response(_args) do
-    {:ok, professions} = ElixirJobs.Parser.parse_professions()
-    {:ok, jobs} = ElixirJobs.Parser.parse_jobs()
+    {:ok, professions} = ElixirJobs.Parser.parse_professions("data/technical-test-professions.csv")
+    {:ok, jobs} = ElixirJobs.Parser.parse_jobs("data/technical-test-jobs-test.csv")
 
     ElixirJobs.JobsTable.create(jobs, professions)
-    |> ElixirJobs.JobsTable.prettify
   end
 end
