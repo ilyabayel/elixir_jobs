@@ -15,9 +15,13 @@ defmodule ElixirJobs.CLI do
   end
 
   defp response(_args) do
-    {:ok, professions} = ElixirJobs.Utils.Parser.parse_professions("data/technical-test-professions.csv")
-    {:ok, jobs} = ElixirJobs.Utils.Parser.parse_jobs("data/technical-test-jobs-test.csv")
+    {:ok, professions} = ElixirJobs.Utils.Parser.parse_professions(professions_path())
+    {:ok, jobs} = ElixirJobs.Utils.Parser.parse_jobs(jobs_path())
 
     ElixirJobs.JobsTable.create(jobs, professions)
+    |> ElixirJobs.JobsTable.prettify
   end
+
+  defp jobs_path, do: Application.get_env(:elixir_jobs, :jobs_path, "")
+  defp professions_path, do: Application.get_env(:elixir_jobs, :professions_path, "")
 end
