@@ -3,63 +3,65 @@ defmodule ElixirJobs.JobsTable do
 
   @type t :: %__MODULE__{
           header: list(String.t()),
-          body: list(list(any))
+          body: list(list(binary() | integer()))
         }
 
-  @spec create() :: t()
   @spec prettify(t()) :: String.t()
-
-  def create() do
-    jobs_stats = ElixirJobs.JobsStats.create()
-
-    %__MODULE__{
-      header: ["", "Total"] ++ Map.keys(jobs_stats["Unknown"]),
-      body: create_table_body(jobs_stats)
-    }
-  end
+  @spec create() :: t()
 
   def prettify(table) do
     TableRex.quick_render!(table.body, table.header, "Available jobs overview")
   end
 
-  defp create_table_body(jobs_dict) do
-    rows_by_continents =
-      jobs_dict
-      |> Map.keys()
-      |> Enum.map(fn continent ->
-        create_row(jobs_dict, continent)
-      end)
+  def create() do
+    jobs_stats = ElixirJobs.JobsStats.create()
 
-    case length(rows_by_continents) do
-      0 ->
-        rows_by_continents
-
-      _ ->
-        total_row = create_total_row(rows_by_continents)
-        [total_row] ++ rows_by_continents
-    end
+    %__MODULE__{
+      header: header(jobs_stats),
+      body: body(jobs_stats)
+    }
   end
 
-  defp create_total_row(rows_by_continents) do
-    [_ | values_by_categories] = Enum.zip(rows_by_continents)
-
-    ["Total"] ++
-      (values_by_categories
-       |> Enum.map(fn values ->
-         Enum.reduce(
-           Tuple.to_list(values),
-           0,
-           fn v, acc -> acc + v end
-         )
-       end))
+  defp header(jobs_stats) do
+    ["", "Total"] ++ Map.keys(jobs_stats["Unknown"])
   end
 
-  defp create_row(jobs_dict, continent) do
-    [
-      continent,
-      jobs_dict[continent]
-      |> Map.values()
-      |> Enum.reduce(fn value, acc -> acc + value end)
-    ] ++ Map.values(jobs_dict[continent])
+  defp body(jobs_stats) do
+    jobs_stats
+    |> Map.keys()
+    |> build_lines_per_continents(jobs_stats)
+    |> prepend_totals_line
+  end
+
+  defp build_lines_per_continents(continents, jobs_stats) do
+    continents
+    |> Enum.map(fn continent ->
+      Map.values(jobs_stats[continent])
+      |> prepend_total_counter
+      |> build_line(continent)
+    end)
+  end
+
+  defp prepend_total_counter(counters) do
+    [Enum.sum(counters)] ++ counters
+  end
+
+  defp build_line(counters, name) do
+    [name] ++ counters
+  end
+
+  defp prepend_totals_line(lines_per_continents) do
+    [build_total_line(lines_per_continents)] ++ lines_per_continents
+  end
+
+  defp build_total_line(lines_per_continents) do
+    Enum.zip(lines_per_continents)
+    |> Enum.drop(1)
+    |> Enum.map(fn counters_tuple ->
+      counters_tuple
+      |> Tuple.to_list()
+      |> Enum.sum()
+    end)
+    |> build_line("Total")
   end
 end
