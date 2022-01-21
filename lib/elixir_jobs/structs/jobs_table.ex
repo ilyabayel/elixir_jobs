@@ -51,10 +51,10 @@ defmodule ElixirJobs.JobsTable do
   end
 
   defp prepend_totals_line(lines_per_continents) do
-    [build_total_line(lines_per_continents)] ++ lines_per_continents
+    [build_totals_line(lines_per_continents)] ++ lines_per_continents
   end
 
-  defp build_total_line(lines_per_continents) do
+  defp build_totals_line(lines_per_continents) do
     Enum.zip(lines_per_continents)
     |> Enum.drop(1)
     |> Enum.map(fn counters_tuple ->
