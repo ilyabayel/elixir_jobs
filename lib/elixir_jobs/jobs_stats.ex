@@ -12,6 +12,11 @@ defmodule ElixirJobs.JobsStats do
   @doc """
     Creates and counts JobsStats
     JobsStats[continent][profession] = JobCounter
+    %{
+      "Continent" => %{
+        "Profession" => 0
+      }
+    }
   """
   def create do
     professions_by_ids = ElixirJobs.Utils.Parser.parse_professions(professions_path())
@@ -41,7 +46,7 @@ defmodule ElixirJobs.JobsStats do
     Creates JobsStats with zero counters
   """
   def init_jobs_stats(professions_by_ids) do
-    ElixirJobs.Utils.Continents.continents()
+    Continents.continents()
     |> Map.new(fn continent ->
       {continent,
        professions_by_ids
