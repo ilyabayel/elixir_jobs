@@ -58,4 +58,4 @@ Furthermore, my conjecture is that:
     - ``latitude`` [deg] any number
     - ``longitude`` [deg] any number
     - ``radius`` [km] must be > 0
-  - Example: ``/jobs&latitude=0&longitude=0&radius=1``
+  - Example: ``/jobs?latitude=0&longitude=0&radius=1``
